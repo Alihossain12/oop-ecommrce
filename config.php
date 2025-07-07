@@ -78,4 +78,50 @@ class Config {
         }
     }
 
+    static public function get_all_products()
+    {
+        $connection = self::connect();
+        $sql = "SELECT products.*, categories.category_name FROM products LEFT JOIN categories ON products.category_id = categories.id ORDER BY products.id DESC";
+        $result = mysqli_query($connection, $sql);
+        if (!$result) {
+            return [];
+        }
+        $data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        return $data;
+    }
+
+    static public function get_single_product($id)
+    {
+        $connection = self::connect();
+        $sql = "SELECT products.*, categories.category_name FROM products LEFT JOIN categories ON products.category_id = categories.id WHERE products.id = '{$id}'";
+        $result = mysqli_query($connection, $sql);
+        $data = mysqli_fetch_assoc($result);
+        return $data;
+    }
+
+    static public function update_product($id, $name, $description, $price, $category_id, $image = null)
+    {
+        $connection = self::connect();
+        $set_image = $image ? ", image = '{$image}'" : "";
+        $sql = "UPDATE products SET name = '{$name}', description = '{$description}', price = '{$price}', category_id = '{$category_id}'{$set_image} WHERE id = '{$id}'";
+        if ($connection->query($sql) === true) {
+            header('Location: index.php');
+        } else {
+            print_r($connection->error);
+            die();
+        }
+    }
+
+    static public function delete_product($id)
+    {
+        $connection = self::connect();
+        $sql = "DELETE FROM products WHERE id = '{$id}'";
+        if ($connection->query($sql) === true) {
+            header('Location: index.php');
+        } else {
+            print_r($connection->error);
+            die();
+        }
+    }
+
 }

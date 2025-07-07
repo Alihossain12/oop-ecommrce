@@ -30,4 +30,4 @@ class CategoryUpdate
     }
 }
 
-new CategoryUpdate();
+new CategoryUpdate(); 

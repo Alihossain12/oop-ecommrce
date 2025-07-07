@@ -9,7 +9,7 @@ class Store {
 
     public function require_files()
     {
-        require_once 'config.php';
+        require_once './config.php';
     }
 
     public function data()

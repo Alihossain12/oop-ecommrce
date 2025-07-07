@@ -8,33 +8,18 @@ class Main {
         Helper::footer();
     }
 
+    public function require_file()
+    {
+        require_once './helper.php';
+        require_once './config.php';
+    }
+
     public function view()
     {
         $this->table_header();
         $this->table_body();
     }
-
-    public function table_body() 
-    {
-        ?>
-            <table class="table table-hover table-bordered bg-white shadow-sm">
-                <thead class="table-light">
-                    <tr><th>Title</th><th>Author</th><th>ISBN</th><th>Category</th><th>Actions</th></tr>
-                </thead>
-                <tbody>
-                    <tr>
-                    <td>The Alchemist</td><td>Paulo Coelho</td><td>9780061122415</td><td>Fiction</td>
-                    <td>
-                        <a href="view.html?id=1" class="btn btn-sm btn-info">View</a>
-                        <a href="edit.html?id=1" class="btn btn-sm btn-warning">Edit</a>
-                        <a href="delete.html?id=1" class="btn btn-sm btn-danger">Delete</a>
-                    </td>
-                    </tr>
-                </tbody>
-            </table>
-        <?php 
-    }
-
+    
     public function table_header()
     {
         ?>
@@ -48,11 +33,55 @@ class Main {
         <?php 
     }
 
-    public function require_file()
+    public function table_body() 
     {
-        require_once './helper.php';
-        require_once './config.php';
+        // Fetch all products from the database
+        $products = Config::get_all_products(); // You need to implement this method in your Config class
+
+        ?>
+            <table class="table table-hover table-bordered bg-white shadow-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Image</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (!empty($products)): ?>
+                        <?php foreach ($products as $row): ?>
+                            <tr>
+                                <td><?php echo htmlspecialchars($row['name']) ?></td>
+                                <td><?php echo htmlspecialchars($row['category_name']) ?></td>
+                                <td><?php echo htmlspecialchars($row['price']) ?></td>
+                                <td>
+                                    <?php if (!empty($row['image'])): ?>
+                                        <img src="uploads/<?php echo htmlspecialchars($row['image']) ?>" alt="Product Image" width="60">
+                                    <?php else: ?>
+                                        N/A
+                                    <?php endif; ?>
+                                </td>
+                                <td><?php echo htmlspecialchars($row['description']) ?></td>
+                                <td>
+                                    <a href="view.php?id=<?php echo $row['id'] ?>" class="btn btn-sm btn-info">View</a>
+                                    <a href="edit.php?id=<?php echo $row['id'] ?>" class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="delete.php?id=<?php echo $row['id'] ?>" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="6" class="text-center">No products found.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        <?php 
     }
+
 }
 
 new Main();

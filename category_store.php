@@ -27,5 +27,5 @@ class CategoryStore
         return htmlspecialchars(strip_tags(trim($value)));
     }
 }
-
+ 
 new CategoryStore();
