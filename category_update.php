@@ -11,7 +11,7 @@ class CategoryUpdate
 
     public function require_files()
     {
-        require_once 'config.php';
+        require_once './config.php';
     }
 
     public function data()
@@ -28,6 +28,8 @@ class CategoryUpdate
     {
         return htmlspecialchars(strip_tags(trim($value)));
     }
+
+    
 }
 
 new CategoryUpdate(); 
